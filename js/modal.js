@@ -138,9 +138,7 @@ function getFieldElementByName(name) {
 
 /** Reset form fields */
 function resetFieldElements() {
-	formFieldNames.forEach((name) => {
-		const inputElement = getFieldElementByName(name);
-
+	Object.values(formFieldInputElements).forEach((inputElement) => {
 		if (!inputElement) return;
 
 		if (inputElement.type === "radio" || inputElement.type === "checkbox") {
@@ -192,15 +190,16 @@ function validationFormSignup() {
 
 	removeAllFormDataFieldErrorVisibility(); // Remove all errors from the form
 
-	for (const fieldName in formFieldInputElements) {
-		const field = formFieldInputElements[fieldName];
-		const validator = validationFormFieldRules[fieldName];
+	Object.entries(formFieldInputElements).forEach(
+		([fieldName, fieldElement]) => {
+			const validator = validationFormFieldRules[fieldName];
 
-		if (!validator(field)) {
-			isFormValid = false;
-			setFormDataFieldErrorVisibility(fieldName);
+			if (!validator(fieldElement)) {
+				isFormValid = false;
+				setFormDataFieldErrorVisibility(fieldName);
+			}
 		}
-	}
+	);
 
 	return isFormValid;
 }
