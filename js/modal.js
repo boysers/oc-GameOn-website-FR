@@ -1,15 +1,18 @@
-// ====== Modal.js ======
-
-// === Values ===
-
-// DOM Elements
-const modalbg = document.querySelector(".bground");
-const modalBtn = document.querySelectorAll(".modal-btn");
-const signupForm = document.querySelector("#signup-form");
-const formDataFields = document.querySelectorAll(".formData");
+/**
+ * @typedef {Object} FieldElementsInterface
+ * @property {HTMLInputElement} firstname - Champ de prénom.
+ * @property {HTMLInputElement} lastname - Champ de nom de famille.
+ * @property {HTMLInputElement} email - Champ d'adresse e-mail.
+ * @property {HTMLInputElement} birthdate - Champ de date de naissance.
+ * @property {HTMLInputElement} quantity - Champ de quantité (type number).
+ * @property {HTMLInputElement|null} location - Élément de lieu (peut être null).
+ * @property {HTMLInputElement} checkbox1 - Case à cocher 1.
+ * @property {HTMLInputElement} checkbox2 - Case à cocher 2.
+ */
 
 /** Form validity indicator */
 let isFormValid = false;
+let isProd = true;
 
 /** Form field names */
 const formFieldNames = [
@@ -23,10 +26,16 @@ const formFieldNames = [
 	"checkbox2",
 ];
 
-// === Functions ===
+// DOM Elements
+const modalbg = document.querySelector(".bground");
+const modalBtn = document.querySelectorAll(".modal-btn");
+const signupForm = document.querySelector("#signup-form");
+const formDataFields = document.querySelectorAll(".formData");
+
+const formFieldInputElements = createFieldElementsObject();
 
 /** Object containing validation functions for each field */
-const validationForFieldRules = {
+const validationFormFieldRules = {
 	firstname: ({ value }) => Validator.validationText(value),
 	lastname: ({ value }) => Validator.validationText(value),
 	email: ({ value }) => Validator.validationEmailAddress(value),
@@ -37,19 +46,49 @@ const validationForFieldRules = {
 	checkbox2: () => true,
 };
 
+// Functions
+
 /**
- * Finds and returns the selected radio element if it exists, otherwise returns null
- * @param {HTMLInputElement[]} radioInputElements
- * @returns {HTMLInputElement|null}
+ * responsive navbar
+ * @return {void}
  */
-function getSelectedRadioButton(radioInputElements) {
-	return radioInputElements.find((input) => input.checked) || null;
+function editNav() {
+	document.getElementById("myTopnav").classList.toggle("responsive");
+}
+
+/**
+ * Display field values in console log
+ * For the test
+ * @returns {void}
+ */
+function logFormValues() {
+	if (isProd) return;
+
+	console.clear();
+	Object.entries(formFieldInputElements).forEach((el) => {
+		console.log(
+			el[0],
+			":",
+			el[1]?.type !== "checkbox"
+				? formatString(el[1]?.value)
+				: el[1].checked
+		);
+	});
+}
+
+/**
+ *
+ * @param {string} str
+ * @returns {string}
+ */
+function formatString(str) {
+	return str?.trim().replace(/\s/g, " ") ?? "";
 }
 
 /**
  * Finds a form element based on the input name
  * @param {string} name
- * @returns {HTMLDivElement}
+ * @returns {HTMLDivElement|null}
  */
 function getFormDataFieldElementByName(name) {
 	let formDataFieldElement = null;
@@ -65,26 +104,33 @@ function getFormDataFieldElementByName(name) {
 /**
  * Find a form element based on input name and type
  * @param {string} name
- * @returns {HTMLInputElement}
+ * @returns {HTMLInputElement|null}
  */
 function getFieldElementByName(name) {
 	if (!formFieldNames.includes(name)) return null;
 
 	let fieldElement = getFormDataFieldElementByName(name);
 
-	switch (name) {
-		case "location":
-			fieldElement = getSelectedRadioButton([
-				...fieldElement.querySelectorAll("input"),
-			]);
-			break;
-		case "checkbox1":
-		case "checkbox2":
-			fieldElement = fieldElement.children[0];
-			break;
-		default:
-			fieldElement = fieldElement.querySelector("input");
-			break;
+	if (fieldElement) {
+		switch (name) {
+			case "location":
+				fieldElement.addEventListener("change", (e) => {
+					const target = e.target;
+					if (target.type !== "radio" && !target.checked) return;
+
+					formFieldInputElements.location = target;
+				});
+
+				fieldElement = null;
+				break;
+			case "checkbox1":
+			case "checkbox2":
+				fieldElement = fieldElement.children[0];
+				break;
+			default:
+				fieldElement = fieldElement.querySelector("input");
+				break;
+		}
 	}
 
 	return fieldElement;
@@ -105,7 +151,10 @@ function resetFieldElements() {
 	});
 }
 
-/** Function to create the fieldElements object */
+/**
+ * Function to create the fieldElements object
+ * @returns {FieldElementsInterface}
+ * */
 function createFieldElementsObject() {
 	const fieldElements = {};
 
@@ -141,13 +190,11 @@ function validationFormSignup() {
 	/** Form validity indicator */
 	let isFormValid = true;
 
-	const fieldElements = createFieldElementsObject();
-
 	removeAllFormDataFieldErrorVisibility(); // Remove all errors from the form
 
-	for (const fieldName in fieldElements) {
-		const field = fieldElements[fieldName];
-		const validator = validationForFieldRules[fieldName];
+	for (const fieldName in formFieldInputElements) {
+		const field = formFieldInputElements[fieldName];
+		const validator = validationFormFieldRules[fieldName];
 
 		if (!validator(field)) {
 			isFormValid = false;
@@ -211,6 +258,8 @@ function handleFormSubmit(e) {
 	e.preventDefault();
 
 	isFormValid = validationFormSignup();
+
+	logFormValues(); // display field values in console log
 
 	if (isFormValid) {
 		ModalUtility.toggleSuccessDisplay();
@@ -326,3 +375,5 @@ signupForm.addEventListener("submit", handleFormSubmit);
 modalBtn.forEach((btn) => btn.addEventListener("click", openModal)); // Event to open the modal
 modalbg.addEventListener("click", handleModalClickOutside); // Event to close the modal by clicking outside
 document.addEventListener("keydown", handleModalKeydown); // Event to close the modal by pressing the "Escape" key
+
+logFormValues();
