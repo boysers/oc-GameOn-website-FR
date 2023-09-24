@@ -82,7 +82,7 @@ function logFormValues() {
  * @returns {string}
  */
 function formatString(str) {
-	return str?.trim().replace(/\s/g, " ") ?? "";
+	return str?.trim().replace(/\s+/g, " ") ?? "";
 }
 
 /**
@@ -91,14 +91,8 @@ function formatString(str) {
  * @returns {HTMLDivElement|null}
  */
 function getFormDataFieldElementByName(name) {
-	let formDataFieldElement = null;
-
 	const index = formFieldNames.indexOf(name);
-	if (index !== -1) {
-		formDataFieldElement = formDataFields[index];
-	}
-
-	return formDataFieldElement;
+	return index !== -1 ? formDataFields[index] : null;
 }
 
 /**
@@ -106,34 +100,17 @@ function getFormDataFieldElementByName(name) {
  * @param {string} name
  * @returns {HTMLInputElement|null}
  */
-function getFieldElementByName(name) {
-	if (!formFieldNames.includes(name)) return null;
+function getFieldInputElementByName(name) {
+	const fieldElement = getFormDataFieldElementByName(name);
 
-	let fieldElement = getFormDataFieldElementByName(name);
+	if (!fieldElement) return fieldElement;
 
-	if (fieldElement) {
-		switch (name) {
-			case "location":
-				fieldElement.addEventListener("change", (e) => {
-					const target = e.target;
-					if (target.type !== "radio" && !target.checked) return;
-
-					formFieldInputElements.location = target;
-				});
-
-				fieldElement = null;
-				break;
-			case "checkbox1":
-			case "checkbox2":
-				fieldElement = fieldElement.children[0];
-				break;
-			default:
-				fieldElement = fieldElement.querySelector("input");
-				break;
-		}
+	if (name == "location") {
+		fieldElement.addEventListener("change", handleLocationChange);
+		return null;
 	}
 
-	return fieldElement;
+	return fieldElement.querySelector("input");
 }
 
 /** Reset form fields */
@@ -141,8 +118,12 @@ function resetFieldElements() {
 	Object.values(formFieldInputElements).forEach((inputElement) => {
 		if (!inputElement) return;
 
-		if (inputElement.type === "radio" || inputElement.type === "checkbox") {
+		if (["radio", "checkbox"].includes(inputElement.type)) {
 			inputElement.checked = inputElement.name === "checkbox1";
+
+			if (inputElement.name == "location") {
+				formFieldInputElements.location = null;
+			}
 		} else {
 			inputElement.value = "";
 		}
@@ -157,7 +138,7 @@ function createFieldElementsObject() {
 	const fieldElements = {};
 
 	formFieldNames.forEach((fieldName) => {
-		fieldElements[fieldName] = getFieldElementByName(fieldName);
+		fieldElements[fieldName] = getFieldInputElementByName(fieldName);
 	});
 
 	return fieldElements;
@@ -224,6 +205,17 @@ function closeModal() {
 }
 
 /**
+ * Handle the change event for the location field
+ * @param {Event} e - The change event
+ */
+function handleLocationChange(e) {
+	const target = e.target;
+	if (target.type === "radio" && target.checked) {
+		formFieldInputElements.location = target;
+	}
+}
+
+/**
  * Handle the modal close event by clicking outside.
  * @param {MouseEvent} e
  */
@@ -258,12 +250,12 @@ function handleFormSubmit(e) {
 
 	isFormValid = validationFormSignup();
 
-	logFormValues(); // display field values in console log
-
 	if (isFormValid) {
 		ModalUtility.toggleSuccessDisplay();
 		resetFieldElements();
 	}
+
+	logFormValues(); // display field values in console log
 }
 
 // === Utilities Class ===
@@ -272,21 +264,21 @@ function handleFormSubmit(e) {
 class ModalUtility {
 	/** Method to toggle success form display */
 	static toggleSuccessDisplay() {
-		const content = document.querySelector(".content");
+		const contentElement = document.querySelector(".content");
 
 		if (!signupForm.style.display) {
 			signupForm.style.display = "none";
-			content.classList.add("success");
+			contentElement.classList.add("success");
 			document.querySelectorAll(".success-el").forEach((element) => {
-				element.classList.toggle("not-visible");
-				element.classList.toggle("visible");
+				element.classList.remove("not-visible");
+				element.classList.add("visible");
 			});
 		} else {
 			signupForm.style.display = null;
-			content.classList.remove("success");
+			contentElement.classList.remove("success");
 			document.querySelectorAll(".success-el").forEach((element) => {
-				element.classList.toggle("not-visible");
-				element.classList.toggle("visible");
+				element.classList.add("not-visible");
+				element.classList.remove("visible");
 			});
 		}
 	}
@@ -322,9 +314,7 @@ class Validator {
 	 * @returns {boolean}
 	 */
 	static validationText(text) {
-		if (!text || text.length < 2 || text.trim() === "") {
-			return false;
-		}
+		if (text?.trim().length < 2) return false;
 		return true;
 	}
 
@@ -357,11 +347,10 @@ class Validator {
 	 */
 	static validationQuantityNumber(quantity, min = 0, max = 99) {
 		const quantityValue = parseInt(quantity, 10);
-		return (
-			!isNaN(quantityValue) &&
-			quantityValue >= min &&
-			quantityValue <= max
-		);
+
+		const isWithinRange = quantityValue >= min && quantityValue <= max;
+
+		return !isNaN(quantityValue) && isWithinRange;
 	}
 }
 
@@ -372,7 +361,7 @@ signupForm.addEventListener("submit", handleFormSubmit);
 
 // Events Modal
 modalBtn.forEach((btn) => btn.addEventListener("click", openModal)); // Event to open the modal
-modalbg.addEventListener("click", handleModalClickOutside); // Event to close the modal by clicking outside
+modalbg.addEventListener("mousedown", handleModalClickOutside); // Event to close the modal by clicking outside
 document.addEventListener("keydown", handleModalKeydown); // Event to close the modal by pressing the "Escape" key
 
 logFormValues();
