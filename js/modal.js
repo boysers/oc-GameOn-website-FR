@@ -1,13 +1,13 @@
 /**
  * @typedef {Object} FieldElementsInterface
- * @property {HTMLInputElement} firstname - Champ de prénom.
- * @property {HTMLInputElement} lastname - Champ de nom de famille.
- * @property {HTMLInputElement} email - Champ d'adresse e-mail.
- * @property {HTMLInputElement} birthdate - Champ de date de naissance.
- * @property {HTMLInputElement} quantity - Champ de quantité (type number).
- * @property {HTMLInputElement|null} location - Élément de lieu (peut être null).
- * @property {HTMLInputElement} checkbox1 - Case à cocher 1.
- * @property {HTMLInputElement} checkbox2 - Case à cocher 2.
+ * @property {HTMLInputElement} firstname
+ * @property {HTMLInputElement} lastname
+ * @property {HTMLInputElement} email
+ * @property {HTMLInputElement} birthdate
+ * @property {HTMLInputElement} quantity
+ * @property {HTMLInputElement|null} location
+ * @property {HTMLInputElement} checkbox1
+ * @property {HTMLInputElement} checkbox2
  */
 
 /** Form validity indicator */
@@ -32,7 +32,7 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const signupForm = document.querySelector("#signup-form");
 const formDataFields = document.querySelectorAll(".formData");
 
-const formFieldInputElements = createFieldElementsObject();
+const formFieldInputElements = createFieldInputElementsObject();
 
 /** Object containing validation functions for each field */
 const validationFormFieldRules = {
@@ -134,7 +134,7 @@ function resetFieldElements() {
  * Function to create the fieldElements object
  * @returns {FieldElementsInterface}
  * */
-function createFieldElementsObject() {
+function createFieldInputElementsObject() {
 	const fieldElements = {};
 
 	formFieldNames.forEach((fieldName) => {
@@ -271,7 +271,6 @@ class ModalUtility {
 			contentElement.classList.add("success");
 			document.querySelectorAll(".success-el").forEach((element) => {
 				element.classList.remove("not-visible");
-				element.classList.add("visible");
 			});
 		} else {
 			signupForm.style.display = null;
