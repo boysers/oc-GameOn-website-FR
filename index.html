@@ -4,7 +4,7 @@
 		<meta charset="utf-8" />
 		<title>Reservation</title>
 		<meta name="viewport" content="width=device-width,initial-scale=1" />
-		<link rel="stylesheet" href="./css/modal.css" />
+		<link rel="stylesheet" href="css/modal.css" />
 		<link
 			rel="stylesheet"
 			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
@@ -30,7 +30,7 @@
 				<a href="#"><span>À propos</span></a>
 				<a href="#"><span>Contact</span></a>
 				<a href="#"><span>Évènements passés</span></a>
-				<a href="javascript:void(0);" class="icon " onclick="editNav()">
+				<a href="#" class="icon" id="nav-btn">
 					<i class="fa fa-bars"></i>
 				</a>
 			</div>
@@ -46,16 +46,20 @@
 						Vous aimez jouer ? Notre prochain évènement gaming est
 						ouvert aux réservations... Places limitées !
 					</p>
-					<button class="btn-signup modal-btn">je m'inscris</button>
+					<button class="btn-signup modal-btn" data-js="open-modal">
+						je m'inscris
+					</button>
 				</div>
 				<div class="hero-img">
 					<img src="./images/bg_img.jpg" alt="img" />
 				</div>
-				<button class="btn-signup modal-btn">je m'inscris</button>
+				<button class="btn-signup modal-btn" data-js="open-modal">
+					je m'inscris
+				</button>
 			</div>
 			<div class="bground">
 				<div class="content">
-					<span class="close"></span>
+					<span class="close" data-js="close-modal"></span>
 					<div class="modal-body">
 						<form
 							id="signup-form"
@@ -68,12 +72,12 @@
 								data-error="Veuillez entrer 2 caractères ou plus pour le champ du prénom."
 								data-error-visible="false"
 							>
-								<label for="first">Prénom</label><br />
+								<label for="firstname">Prénom</label><br />
 								<input
 									class="text-control"
 									type="text"
-									id="first"
-									name="first"
+									id="firstname"
+									name="firstname"
 									minlength="2"
 								/><br />
 							</div>
@@ -82,12 +86,12 @@
 								data-error="Veuillez entrer 2 caractères ou plus pour le champ du nom."
 								data-error-visible="false"
 							>
-								<label for="last">Nom</label><br />
+								<label for="lastname">Nom</label><br />
 								<input
 									class="text-control"
 									type="text"
-									id="last"
-									name="last"
+									id="lastname"
+									name="lastname"
 								/><br />
 							</div>
 							<div
@@ -264,7 +268,7 @@
 					</div>
 					<button
 						class="btn-signup btn-success success-el not-visible"
-						data-js="close"
+						data-js="close-modal"
 					>
 						Fermer
 					</button>
@@ -274,6 +278,7 @@
 		<footer>
 			<p class="copyrights">Copyright 2014 - 2022, GameOn Inc.</p>
 		</footer>
-		<script src="./js/modal.js"></script>
+		<script src="js/main.js" type="module"></script>
+		<!-- <script src="scripts/modal.js" type="module"></script> -->
 	</body>
 </html>
