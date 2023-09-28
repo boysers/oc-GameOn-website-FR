@@ -1,34 +1,20 @@
-import { topnavInit } from "./components/topnav.js";
-import { Modal } from "./components/Modal.js";
-import { Form } from "./components/form.js";
+import { topnavInit } from "./utils/topnav.js";
+import { Modal } from "./controller/Modal.js";
+import { Form } from "./controller/Form.js";
 import { ModalFormController } from "./controller/ModalFormController.js";
 import "./css/fonts.css";
 import "./css/style.css";
-import { User } from "./models/User.js";
+import { UserFormDataBuilder } from "./models/UserFormDataBuilder.js";
 
 function main() {
 	topnavInit();
 
-	const form = new Form("#signup-form");
+	const userFormDataBuilder = new UserFormDataBuilder();
+	const form = new Form("#signup-form", userFormDataBuilder);
 	const modal = new Modal(".bground");
-	const modalFormInterface = new ModalFormController(modal, form);
-	modalFormInterface.init();
 
-	const userArray = [];
-	const user1 = new User(
-		"Jean",
-		"Claude",
-		"contact@example.com",
-		"10/08/1999",
-		"Paris",
-		true,
-		false
-	);
-	Object.entries(user1).forEach(([key, value]) => {
-		console.log(`${key}: ${value}`);
-		userArray.push(value);
-	});
-	console.log(userArray);
+	const modalFormController = new ModalFormController(modal, form);
+	modalFormController.init();
 }
 
 main();

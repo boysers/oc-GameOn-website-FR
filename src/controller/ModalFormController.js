@@ -1,5 +1,3 @@
-import { logFormData } from "../utils/logFormData";
-
 export class ModalFormController {
 	_modalController = null;
 	_formController = null;
@@ -58,12 +56,16 @@ export class ModalFormController {
 
 		const formController = this._formController;
 
-		if (!formController.isFormValid()) return;
+		try {
+			const formData = formController.createData();
 
-		logFormData(e);
+			console.log(formData);
 
-		this._openSuccessMessage();
-		formController.formDOM.reset();
+			this._openSuccessMessage();
+			formController.formDOM.reset();
+		} catch (error) {
+			console.error(error);
+		}
 	}
 
 	_modalInit() {

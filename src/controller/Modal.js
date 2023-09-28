@@ -1,4 +1,4 @@
-import { toggleMobileTopnav } from "./topnav";
+import { toggleMobileTopnav } from "../utils/topnav";
 
 export class Modal {
 	modalDOM = null;
