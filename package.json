@@ -1,0 +1,25 @@
+{
+	"name": "oc-gameon-website-fr",
+	"version": "0.0.1",
+	"description": "Code du projet 4 de développeur front-end",
+	"type": "module",
+	"scripts": {
+		"dev": "vite",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/boysers/oc-GameOn-website-FR.git"
+	},
+	"author": "boysers",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/boysers/oc-GameOn-website-FR/issues"
+	},
+	"homepage": "https://github.com/boysers/oc-GameOn-website-FR#readme",
+	"devDependencies": {
+		"eslint": "^8.50.0",
+		"vite": "^4.4.9"
+	}
+}

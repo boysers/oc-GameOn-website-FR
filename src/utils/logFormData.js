@@ -1,6 +1,4 @@
 /**
- * Display field values in console log
- * For the test
  * @param {FormDataEvent} e
  * @returns {void}
  */
