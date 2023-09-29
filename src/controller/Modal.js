@@ -46,11 +46,11 @@ export class Modal {
 	isClickOutsideModal(targetElement) {
 		if (!targetElement) return;
 
-		const isModalbg = targetElement == this.modalDOM;
+		const isModalDOM = targetElement == this.modalDOM;
 		const isCloseModalBtn =
 			targetElement.getAttribute("data-js") == "close-modal";
 
-		if (isModalbg || isCloseModalBtn) return true;
+		if (isModalDOM || isCloseModalBtn) return true;
 		return false;
 	}
 }

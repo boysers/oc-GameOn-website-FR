@@ -1,3 +1,4 @@
+import { FormDataException } from "../utils/FormDataException.js";
 import { UserValidator } from "../utils/UserValidator.js";
 import { User } from "./User.js";
 
@@ -27,11 +28,12 @@ export class UserFormDataBuilder {
 
 	build() {
 		const errors = UserValidator.validateUser(this);
-
 		if (Object.keys(errors).length > 0) {
-			throw errors;
+			throw new FormDataException(
+				"Validation failed for user form data",
+				errors
+			);
 		}
-
 		return new User(
 			this.firstname,
 			this.lastname,

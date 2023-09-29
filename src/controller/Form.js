@@ -1,3 +1,5 @@
+import { FormDataException } from "../utils/FormDataException";
+
 export class Form {
 	_inputNames = [];
 	_fields = {};
@@ -26,9 +28,11 @@ export class Form {
 			const dataBuilder = this._formDataBuilder.setData(formData);
 			return dataBuilder.build();
 		} catch (error) {
-			Object.entries(error).forEach(([name, errorMessage]) => {
-				this._setFieldError(name, true, errorMessage);
-			});
+			if (error instanceof FormDataException) {
+				Object.entries(error.errors).forEach(([name, errorMessage]) => {
+					this._setFieldError(name, true, errorMessage);
+				});
+			}
 			throw error;
 		}
 	}
