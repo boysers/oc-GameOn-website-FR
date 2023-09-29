@@ -33,6 +33,11 @@ export class Form {
 		}
 	}
 
+	reset() {
+		this.formDOM.reset();
+		this._inputs = this._createInputs();
+	}
+
 	_extractInputValues() {
 		let formData = {};
 		Object.entries(this._inputs).forEach(([key, input]) => {

@@ -62,7 +62,7 @@ export class ModalFormController {
 			console.log(formData);
 
 			this._openSuccessMessage();
-			formController.formDOM.reset();
+			formController.reset()
 		} catch (error) {
 			console.error(error);
 		}
