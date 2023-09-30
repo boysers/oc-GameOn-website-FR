@@ -1,42 +1,26 @@
 export class Validator {
-	/**
-	 * @param {string} name
-	 * @returns {boolean}
-	 */
-	static isName(name) {
+	static isName(name: string): boolean {
 		if (name?.trim().length < 2) return false;
 		return true;
 	}
 
-	/**
-	 * @param {string} email
-	 * @returns {boolean}
-	 */
-	static isEmailAddress(email) {
+	static isEmailAddress(email: string): boolean {
 		const emailRegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 		return emailRegExp.test(email);
 	}
 
-	/**
-	 * @param {string} dateString
-	 * @returns {boolean}
-	 */
-	static isDate(dateString) {
+	static isDate(dateString: string): boolean {
 		const date = new Date(dateString);
 		return !isNaN(date.getTime());
 	}
 
-	/**
-	 * @param {string|number} quantity
-	 * @param {number} min
-	 * @param {number} max
-	 * @returns {boolean}
-	 */
-	static isQuantityNumber(quantity, min = 0, max = 99) {
+	static isQuantityNumber(
+		quantity: string,
+		min: number = 0,
+		max: number = 99
+	): boolean {
 		const quantityValue = parseInt(quantity, 10);
-
 		const isWithinRange = quantityValue >= min && quantityValue <= max;
-
 		return !isNaN(quantityValue) && isWithinRange;
 	}
 }
