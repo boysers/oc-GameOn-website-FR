@@ -1,13 +1,5 @@
 import { Validator } from "../utils/Validator";
 
-type RulesType = Record<
-	string,
-	{
-		validationFunction: (arg: string | number | boolean) => boolean;
-		errorMessage: string;
-	}
->;
-
 interface IUserProps {
 	firstname: string;
 	lastname: string;
@@ -38,7 +30,7 @@ export class User {
 	private constructor(private props: IUserProps) {}
 
 	private validate() {
-		const rules: RulesType = {
+		const rules = {
 			firstname: {
 				validationFunction: (name: string) => Validator.isName(name),
 				errorMessage:
