@@ -45,7 +45,6 @@ function main() {
 			console.log("Formulaire :", user.snapshot);
 			formElement.reset();
 		} catch (error) {
-			console.error("Form Component:", error);
 			if (error instanceof UserEntityException) {
 				Object.entries(error.inputErrors).forEach(([key, value]) => {
 					const field = fields[key];
