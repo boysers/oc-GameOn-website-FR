@@ -56,7 +56,7 @@ function main() {
 			try {
 				const user = User.createUser(formData);
 				handleOpenSuccessMessage();
-				// console.log("Formulaire :", user.snapshot);
+				console.log("Formulaire :", user.snapshot);
 				formElement.reset();
 			} catch (error) {
 				if (error instanceof UserEntityException) {
