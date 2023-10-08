@@ -1,4 +1,5 @@
 import { Validator } from "../utils/Validator";
+import { UserEntityException } from "./UserEntityException";
 
 interface IUserProps {
 	firstname: string;
@@ -9,15 +10,6 @@ interface IUserProps {
 	location: string;
 	checkbox1: boolean;
 	checkbox2: boolean;
-}
-
-export class UserEntityException extends Error {
-	constructor(public inputErrors: Record<string, string>) {
-		super();
-		this.name = "User Entity Exception";
-		this.message = JSON.stringify(inputErrors);
-		this.inputErrors = inputErrors;
-	}
 }
 
 export class User {
