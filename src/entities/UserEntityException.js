@@ -1,5 +1,5 @@
 export class UserEntityException extends Error {
-	constructor(public inputErrors: Record<string, string>) {
+	constructor(inputErrors) {
 		super();
 		this.name = "User Entity Exception";
 		this.message = JSON.stringify(inputErrors);

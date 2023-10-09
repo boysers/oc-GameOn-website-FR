@@ -1,10 +1,9 @@
-import { Form } from "./components/Form";
-import { Modal } from "./components/Modal";
-import { SuccessMessage } from "./components/SuccessMessage";
-import { Topnav } from "./components/Topnav";
-import { User } from "./entities/User";
-import { UserEntityException } from "./entities/UserEntityException";
-import "./style.css";
+import { Form } from "./components/Form.js";
+import { Modal } from "./components/Modal.js";
+import { SuccessMessage } from "./components/SuccessMessage.js";
+import { Topnav } from "./components/Topnav.js";
+import { User } from "./entities/User.js";
+import { UserEntityException } from "./entities/UserEntityException.js";
 
 function main() {
 	const [, { toggleMobileTopnav }] = Topnav();
@@ -42,21 +41,20 @@ function main() {
 
 			const fieldElements = formElement.querySelectorAll(".formData");
 			// Reset error fields
-			fieldElements.forEach((field: HTMLElement) => {
+			fieldElements.forEach((field) => {
 				field.setAttribute("data-error-visible", "false");
 				field.setAttribute("data-error", "");
 			});
 
 			const fields = Object.fromEntries(
 				Object.keys(formData).map(
-					(name, index) => [name, fieldElements[index]] as const
+					(name, index) => [name, fieldElements[index]]
 				)
 			);
 
 			try {
-				const user = User.createUser(formData);
+				User.createUser(formData);
 				handleOpenSuccessMessage();
-				console.log("Formulaire :", user.snapshot);
 				formElement.reset();
 			} catch (error) {
 				if (error instanceof UserEntityException) {

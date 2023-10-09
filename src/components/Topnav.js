@@ -1,5 +1,5 @@
 export const Topnav = () => {
-	const topnav: HTMLElement = document.querySelector("#myTopnav");
+	const topnav = document.querySelector("#myTopnav");
 
 	function editNav() {
 		if (topnav.classList.contains("responsive")) {
@@ -18,12 +18,12 @@ export const Topnav = () => {
 		topnav.classList.add("open-modal");
 	}
 
-	function onClick(e: Event) {
+	function onClick(e) {
 		e.preventDefault();
 		editNav();
 	}
 
 	document.querySelector("#nav-btn").addEventListener("click", onClick);
 
-	return [topnav, { toggleMobileTopnav }] as const;
+	return [topnav, { toggleMobileTopnav }];
 };

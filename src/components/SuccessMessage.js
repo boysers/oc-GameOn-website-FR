@@ -1,12 +1,5 @@
-type SuccessMessageProps = {
-	formElement: HTMLFormElement;
-};
-
-export const SuccessMessage = (
-	selector: string,
-	{ formElement }: SuccessMessageProps
-) => {
-	const successMessageElement: HTMLElement = document.querySelector(selector);
+export const SuccessMessage = (selector, { formElement }) => {
+	const successMessageElement = document.querySelector(selector);
 
 	const handleOpenSuccessMessage = () => {
 		const isFormClose = formElement.classList.contains("close");
@@ -24,5 +17,5 @@ export const SuccessMessage = (
 
 	const handlers = { handleOpenSuccessMessage, handleCloseSuccessMessage };
 
-	return [successMessageElement, handlers] as const;
+	return [successMessageElement, handlers];
 };

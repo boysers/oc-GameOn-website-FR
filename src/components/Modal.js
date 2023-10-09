@@ -1,14 +1,10 @@
-type ModalProps = {
-	onClose?: (e: Event | KeyboardEvent) => void;
-	onOpen?: (e: Event | KeyboardEvent) => void;
-};
-
-export const Modal = (selector: string, { onClose, onOpen }: ModalProps) => {
-	const modalElement: HTMLElement = document.querySelector(selector);
-	const openBtnElements = document.querySelectorAll("[data-js='open-modal'");
-
-	const isOnClose = onClose instanceof Function;
-	const isOnOpen = onOpen instanceof Function;
+export function Modal(selector, options) {
+	const modalElement = document.querySelector(selector);
+	const openBtnElements = document.querySelectorAll("[data-js='open-modal']");
+	const onClose = options.onClose;
+	const onOpen = options.onOpen;
+	const isOnClose = typeof onClose === "function";
+	const isOnOpen = typeof onOpen === "function";
 
 	const toggleScrollbar = () => {
 		const bodyElement = document.body;
@@ -39,27 +35,25 @@ export const Modal = (selector: string, { onClose, onOpen }: ModalProps) => {
 		modalElement.style.display = null;
 	};
 
-	const handleOpenModal = (e: Event) => {
+	const handleOpenModal = (e) => {
 		toggleModalDisplay();
 		if (isOnOpen) {
 			onOpen(e);
 		}
 	};
 
-	const handleCloseModal = (e: Event | KeyboardEvent) => {
-		const isOpen = modalElement.style.display != "block";
+	const handleCloseModal = (e) => {
+		const isOpen = modalElement.style.display !== "block";
 		if (isOpen) return;
 
 		const isKeyboardEvent = e instanceof KeyboardEvent;
 		const isEvent = e instanceof Event;
-
 		const isTargetElement = isEvent && e.target instanceof HTMLElement;
-
-		const isEscapeKey = isKeyboardEvent && e.key == "Escape";
+		const isEscapeKey = isKeyboardEvent && e.key === "Escape";
 		const isModalElement = isTargetElement && e.target === modalElement;
 		const isCloseModalBtn =
 			isTargetElement &&
-			e.target.getAttribute("data-js") == "close-modal";
+			e.target.getAttribute("data-js") === "close-modal";
 
 		if (isEscapeKey || isModalElement || isCloseModalBtn) {
 			toggleModalDisplay();
@@ -69,11 +63,11 @@ export const Modal = (selector: string, { onClose, onOpen }: ModalProps) => {
 		}
 	};
 
-	openBtnElements.forEach((btn) =>
-		btn.addEventListener("click", handleOpenModal)
-	);
+	openBtnElements.forEach((btn) => {
+		btn.addEventListener("click", handleOpenModal);
+	});
 	modalElement.addEventListener("mousedown", handleCloseModal);
 	document.addEventListener("keydown", handleCloseModal);
 
-	return [modalElement, { toggleModalDisplay }] as const;
-};
+	return [modalElement, { toggleModalDisplay }];
+}
