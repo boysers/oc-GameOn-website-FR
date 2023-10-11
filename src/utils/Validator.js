@@ -1,7 +1,10 @@
 export class Validator {
 	static isName(name) {
-		if (name?.trim().length < 2) return false;
-		return true;
+		if (typeof name !== 'string') return false; 
+		const trimmedName = name.trim();
+		const isNonEmptyString = trimmedName.length >= 2; 
+		const containsOnlyLetters = /^[a-zA-Z]+$/.test(trimmedName);
+		return isNonEmptyString && containsOnlyLetters;
 	}
 
 	static isEmailAddress(email) {
@@ -19,4 +22,17 @@ export class Validator {
 		const isWithinRange = quantityValue >= min && quantityValue <= max;
 		return !isNaN(quantityValue) && isWithinRange;
 	}
+
+	static isDateOfBirth(dateString) {
+        const date = new Date(dateString);
+        const currentYear = new Date().getFullYear();
+        const minimumBirthYear = currentYear - 120;
+        const maximumBirthYear = currentYear - 10;
+
+        return (
+            !isNaN(date.getTime()) &&
+            date.getFullYear() >= minimumBirthYear &&
+            date.getFullYear() <= maximumBirthYear
+        );
+    }
 }

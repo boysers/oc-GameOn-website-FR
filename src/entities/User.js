@@ -29,7 +29,7 @@ export class User {
 				errorMessage: "Veuillez entrer un email valide.",
 			},
 			birthdate: {
-				validationFunction: (date) => Validator.isDate(date),
+				validationFunction: (date) => Validator.isDateOfBirth(date),
 				errorMessage: "Vous devez entrer votre date de naissance.",
 			},
 			quantity: {
